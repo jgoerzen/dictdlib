@@ -55,17 +55,26 @@ def b64_decode(str):
     return retval
 
 validdict = {}
-for x in string.ascii_letters + string.digits + ' \t':
+for x in string.ascii_letters + string.digits + " \t":
     validdict[x] = 1
 
 def sortnormalize(x):
     """Returns a value such that x is mapped to a format that sorts properly
     with standard comparison."""
     x2 = ''
-    for char in x:
-        if validdict.has_key(char):
-            x2 += char
-    return x2.lower()
+    for i in range(len(x)):
+        if validdict.has_key(x[i]):
+            x2 += x[i]
+    return x2.upper() + "\0" + x.upper()
+
+def sortfunc(x, y):
+   """Emulate sort -df."""
+   xl = x.split("\0")
+   yl = y.split("\0")
+   ret = cmp(xl[0], yl[0])
+   if ret != 0:
+       return ret
+   return cmp(xl[1], yl[1])
 
 class DictWriter:
     def __init__(self, basename, url = 'unknown', shortname = 'unknown',
@@ -128,7 +137,7 @@ class DictWriter:
                 norm = sortnormalize(entry)
                 if sortmap.has_key(norm):
                     sortmap[norm].append(entry)
-                    sortmap[norm].sort()
+                    sortmap[norm].sort(sortfunc)
                 else:
                     sortmap[norm] = [entry]
 
