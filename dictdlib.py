@@ -216,7 +216,7 @@ class DictDB:
         already long info specified, we will use delindexentry() on it
         first."""
         self.delindexentry(info_headword)
-        self.writeentry(info_headword + "\n" + longinfo, [info_headword])
+        self.addentry(info_headword + "\n" + longinfo, [info_headword])
 
 
     def addentry(self, defstr, headwords):

@@ -1,3 +1,9 @@
+dictdlib (2.0.1) unstable; urgency=low
+
+  * Fixed a bug with setlonginfo.  Closes: #146599, #146602.
+
+ -- John Goerzen <jgoerzen@complete.org>  Thu, 23 May 2002 16:17:28 -0500
+
 dictdlib (2.0.0) unstable; urgency=low
 
   * Rewrote interface; is now capable of updates.  New DictDB class.
