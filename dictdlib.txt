@@ -44,7 +44,7 @@ CLASSES
      |      with .dz.  dict created if nonexistant.
      |      
      |      update -- read/write access, dict created if nonexistant.  Does not
-     |      work with .dz
+     |      work with .dz.
      |      
      |      Read can read dict or dict.dz files.  Write and update will NOT work
      |      with dict.dz files.
@@ -96,11 +96,13 @@ CLASSES
      |  getdef(self, word)
      |      Given a definition name, returns a list of strings with all
      |      matching definitions.  This is an *exact* match, not a
-     |      case-insensitive one.
+     |      case-insensitive one.  Returns [] if word is not in the dictionary.
      |  
      |  getdeflist(self)
      |      Returns a list of strings naming all definitions contained
      |      in this dictionary.
+     |  
+     |  hasdef(self, word)
      |  
      |  setlonginfo(self, longinfo)
      |      Sets the extended information for this database.  If there was

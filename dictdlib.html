@@ -36,9 +36,10 @@ TT { font-family: lucidatypewriter, lucida console, courier }
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="gzip.html">gzip</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
 </td><td width="25%" valign=top><a href="string.html">string</a><br>
 </td><td width="25%" valign=top><a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -70,7 +71,7 @@ write&nbsp;--&nbsp;write-only&nbsp;access,&nbsp;truncates&nbsp;existing&nbsp;fil
 with&nbsp;.dz.&nbsp;&nbsp;dict&nbsp;created&nbsp;if&nbsp;nonexistant.<br>
 &nbsp;<br>
 update&nbsp;--&nbsp;read/write&nbsp;access,&nbsp;dict&nbsp;created&nbsp;if&nbsp;nonexistant.&nbsp;&nbsp;Does&nbsp;not<br>
-work&nbsp;with&nbsp;.dz<br>
+work&nbsp;with&nbsp;.dz.<br>
 &nbsp;<br>
 Read&nbsp;can&nbsp;read&nbsp;dict&nbsp;or&nbsp;dict.dz&nbsp;files.&nbsp;&nbsp;Write&nbsp;and&nbsp;update&nbsp;will&nbsp;NOT&nbsp;work<br>
 with&nbsp;dict.dz&nbsp;files.<br>
@@ -116,10 +117,12 @@ MUST&nbsp;manually&nbsp;sort&nbsp;it&nbsp;through&nbsp;"sort&nbsp;-df"&nbsp;befo
 
 <dl><dt><a name="DictDB-getdef"><strong>getdef</strong></a>(self, word)</dt><dd><tt>Given&nbsp;a&nbsp;definition&nbsp;name,&nbsp;returns&nbsp;a&nbsp;list&nbsp;of&nbsp;strings&nbsp;with&nbsp;all<br>
 matching&nbsp;definitions.&nbsp;&nbsp;This&nbsp;is&nbsp;an&nbsp;*exact*&nbsp;match,&nbsp;not&nbsp;a<br>
-case-insensitive&nbsp;one.</tt></dd></dl>
+case-insensitive&nbsp;one.&nbsp;&nbsp;Returns&nbsp;[]&nbsp;if&nbsp;word&nbsp;is&nbsp;not&nbsp;in&nbsp;the&nbsp;dictionary.</tt></dd></dl>
 
 <dl><dt><a name="DictDB-getdeflist"><strong>getdeflist</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;list&nbsp;of&nbsp;strings&nbsp;naming&nbsp;all&nbsp;definitions&nbsp;contained<br>
 in&nbsp;this&nbsp;dictionary.</tt></dd></dl>
+
+<dl><dt><a name="DictDB-hasdef"><strong>hasdef</strong></a>(self, word)</dt></dl>
 
 <dl><dt><a name="DictDB-setlonginfo"><strong>setlonginfo</strong></a>(self, longinfo)</dt><dd><tt>Sets&nbsp;the&nbsp;extended&nbsp;information&nbsp;for&nbsp;this&nbsp;database.&nbsp;&nbsp;If&nbsp;there&nbsp;was<br>
 already&nbsp;long&nbsp;info&nbsp;specified,&nbsp;we&nbsp;will&nbsp;use&nbsp;<a href="#DictDB-delindexentry">delindexentry</a>()&nbsp;on&nbsp;it<br>
