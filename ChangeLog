@@ -1,0 +1,31 @@
+2002-04-19 11:31  jgoerzen
+
+	* dictdlib.html, dictdlib.txt, debian/changelog, debian/control,
+	debian/copyright, debian/docs: Updated for this package.
+
+2002-04-19 11:27  jgoerzen
+
+	* debian/: changelog, control, copyright, docs, examples, rules:
+	Import from dictclient
+
+2002-04-19 11:26  jgoerzen
+
+	* COPYING, ChangeLog, Makefile, setup.py: Added files in
+	preparation for distribution
+
+2002-04-19 11:21  jgoerzen
+
+	* dictdlib.py: Updated.
+
+2002-04-19 11:07  jgoerzen
+
+	* dictdlib.py: Updated.
+
+2002-04-19 10:20  jgoerzen
+
+	* dictdlib.py: Initial revision
+
+2002-04-19 10:20  jgoerzen
+
+	* dictdlib.py: Initial add
+

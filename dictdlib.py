@@ -16,7 +16,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys, stirng
+import sys, string
 
 b64_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 url_headword = "00-database-url"
@@ -59,6 +59,7 @@ for x in string.ascii_letters + string.digits + ' ':
     validdict[x] = 1
 
 def sortfunc(x, y):
+    """Used to sort entries according to the format required for the index."""
     x2 = ''
     for char in x:
         if validdict.has_key(char):
@@ -70,32 +71,46 @@ def sortfunc(x, y):
     return cmp(x2.lower(), y2.lower())
 
 class DictWriter:
-    def __init__(self, basename, url = 'unknown', shortname = 'unknown'):
+    def __init__(self, basename, url = 'unknown', shortname = 'unknown',
+                 longinfo = 'unknown', quiet = 0):
+        """Initialize a DictWriter object.  Will create 'basename.dict' and
+        'basename.index' files.  url, shortname, and longinfo specify the
+        respective attributes of the database.  If quiet is 1,
+        status messages are not printed."""
         self.dictfile = open(basename + ".dict", "wb")
         self.indexfile = open(basename + ".index", "wb")
         self.indexentries = []
+        self.count = 0
+        self.quiet = quiet
         self.writeentry(url_headword + "\n     " + url, [url_headword])
         self.writeentry(short_headword + "\n     " + shortname,
-                        [url_headword])
-        self.count = 0
+                        [short_headword])
+        self.writeentry(info_headword + longinfo, [info_headword])
 
     def writeentry(self, defstr, headwords):
-        start = self.dictfile.ftell()
+        """Writes an entry.  defstr holds the content of the definition.
+        headwords is a list specifying one or more words under which this
+        definition should be indexed."""
+        start = self.dictfile.tell()
         defstr += "\n"
         self.dictfile.write(defstr)
         for word in headwords:
             self.indexentries.append("%s\t%s\t%s" % \
                                      (word, b64_encode(start),
                                       b64_encode(len(defstr))))
-            count += 1
+            self.count += 1
 
-        if (count % 100 == 0):
-            sys.stdout.write("Processed %d records\r" % count)
+        if (not self.quiet) and (self.count % 1000 == 0):
+            sys.stdout.write("Processed %d records\r" % self.count)
             sys.stdout.flush()
 
     def finish(self):
-        sys.stdout.write("\nWriting index...")
-        sys.stdout.flush()
+        """Called to finish the writing process.  **REQUIRED**.
+        This will write the index and close the files."""
+        if not quiet:
+            sys.stdout.write("\nProcessed %d records.\nWriting index..." % \
+                             self.count)
+            sys.stdout.flush()
 
         self.indexentries.sort()
         for entry in self.indexentries:
@@ -103,3 +118,6 @@ class DictWriter:
 
         self.indexfile.close()
         self.dictfile.close()
+
+        if not quiet:
+            sys.stdout.write(" Finished.\n")
