@@ -85,7 +85,7 @@ class DictWriter:
         status messages are not printed."""
         self.dictfile = open(basename + ".dict", "wb")
         self.indexfile = open(basename + ".index", "wb")
-        self.indexentries = []
+        self.indexentries = {}
         self.count = 0
         self.quiet = quiet
         self.writeentry(url_headword + "\n     " + url, [url_headword])
@@ -108,9 +108,9 @@ class DictWriter:
         defstr += "\n"
         self.dictfile.write(defstr)
         for word in headwords:
-            self.indexentries.append("%s\t%s\t%s" % \
-                                     (word, b64_encode(start),
-                                      b64_encode(len(defstr))))
+            if not self.indexentries.has_key(word):
+                self.indexentries[word] = []
+            self.indexentries[word].append([start, len(defstr)])
             self.count += 1
 
         if self.count % 1000 == 0:
@@ -130,10 +130,18 @@ class DictWriter:
         self.update("Processed %d records.\n" % self.count)
 
         if dosort:
-            self.update("Sorting index: mapping")
+            self.update("Sorting index: converting")
+
+            indexlist = []
+            for word, defs in self.indexentries.items():
+                for thisdef in defs:
+                    indexlist.append("%s\t%s\t%s" % (word, b64_encode(defs[0]),
+                                                     b64_encode(defs[1])))
+
+            self.update(" mapping")
                 
             sortmap = {}
-            for entry in self.indexentries:
+            for entry in indexlist:
                 norm = sortnormalize(entry)
                 if sortmap.has_key(norm):
                     sortmap[norm].append(entry)
@@ -150,17 +158,17 @@ class DictWriter:
             normalizedentries.sort()
 
             self.update(" re-mapping")
-            self.indexentries = []
+            indexlist = []
 
             for normentry in normalizedentries:
                 for entry in sortmap[normentry]:
-                    self.indexentries.append(entry)
+                    indexlist.append(entry)
 
             self.update(", done.\n")
 
         self.update("Writing index...\n")
             
-        for entry in self.indexentries:
+        for entry in indexlist:
             self.indexfile.write(entry + "\n")
 
         self.indexfile.close()
