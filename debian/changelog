@@ -1,3 +1,10 @@
+dictdlib (1.0.3) unstable; urgency=low
+
+  * More adjustments to sort -- the docs for GNU's sort(1) were wrong,
+    made our function bug-compatible.
+
+ -- John Goerzen <jgoerzen@complete.org>  Fri, 19 Apr 2002 15:32:02 -0500
+
 dictdlib (1.0.2) unstable; urgency=low
 
   * Fixed a bug with sorting.

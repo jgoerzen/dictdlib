@@ -55,7 +55,7 @@ def b64_decode(str):
     return retval
 
 validdict = {}
-for x in string.ascii_letters + string.digits + ' ':
+for x in string.ascii_letters + string.digits + ' \t':
     validdict[x] = 1
 
 def sortnormalize(x):
