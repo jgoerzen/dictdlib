@@ -1,3 +1,74 @@
+2002-06-11 15:07  jgoerzen
+
+	* setup.py, debian/changelog: Updated for 2.0.2
+
+2002-06-11 15:06  jgoerzen
+
+	* dictdlib.py: More comprehensive fix!
+
+2002-06-11 15:06  jgoerzen
+
+	* dictdlib.py: Fixed a couple of bugs:
+	
+	* getdef() returns [] if the word is not matched
+	
+	* 'update' tried to open with 'w+b' if the file cannot be opened
+	with 'r+b'
+
+2002-05-23 16:23  jgoerzen
+
+	* dictdlib.py, debian/changelog: Bug fix.
+
+2002-05-02 15:07  jgoerzen
+
+	* debian/changelog: Updated.
+
+2002-05-02 14:47  jgoerzen
+
+	* dictdlib.py: Fixed another getdef() bug
+
+2002-05-02 14:45  jgoerzen
+
+	* dictdlib.py: Fixed a bug with getdef
+
+2002-05-02 14:43  jgoerzen
+
+	* dictdlib.py: Fixed some bugs.
+
+2002-05-02 14:16  jgoerzen
+
+	* dictdlib.html, dictdlib.txt, setup.py, debian/changelog: Bumped
+	version numbers Updated docs.  Prep for testing now.
+
+2002-05-02 14:16  jgoerzen
+
+	* dictdlib.py: Corrected some docs
+
+2002-05-02 14:12  jgoerzen
+
+	* dictdlib.html, dictdlib.py, dictdlib.txt: Updated docs
+
+2002-05-02 14:06  jgoerzen
+
+	* dictdlib.py: Fixed syntax errors
+
+2002-05-02 14:05  jgoerzen
+
+	* dictdlib.py: Finished rewrite
+
+2002-05-02 13:16  jgoerzen
+
+	* dictdlib.py: Beginning of conversion to unified interface.
+
+2002-04-19 20:19  jgoerzen
+
+	* dictdlib.html, dictdlib.py, dictdlib.txt, debian/changelog: Added
+	DictReader.
+
+2002-04-19 20:19  jgoerzen
+
+	* ChangeLog: Updated.
+
 2002-04-19 16:26  jgoerzen
 
 	* dictdlib.py: Another try.

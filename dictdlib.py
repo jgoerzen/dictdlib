@@ -90,7 +90,7 @@ class DictDB:
         with .dz.  dict created if nonexistant.
 
         update -- read/write access, dict created if nonexistant.  Does not
-        work with .dz
+        work with .dz.
 
         Read can read dict or dict.dz files.  Write and update will NOT work
         with dict.dz files.
@@ -126,12 +126,18 @@ class DictDB:
             else:
                 self.dictfile = open(self.dictfilename, "wb")
         elif mode == 'update':
-            self.indexfile = open(self.indexfilename, "r+b")
+            try:
+                self.indexfile = open(self.indexfilename, "r+b")
+            except IOError:
+                self.indexfile = open(self.indexfilename, "w+b")
             if self.usecompression:
                 # Open it read-only since we don't support mods.
                 self.dictfile = gzip.GzipFile(self.dictfilename, "rb")
             else:
-                self.dictfile = open(self.dictfilename, "r+b")
+                try:
+                    self.dictfile = open(self.dictfilename, "r+b")
+                except IOError:
+                    self.dictfile = open(self.dictfilename, "w+b")
             self._initindex()
         else:
             raise ValueError, "mode must be 'read', 'write', or 'update'"
@@ -304,11 +310,16 @@ class DictDB:
         in this dictionary."""
         return self.indexentries.keys()
 
+    def hasdef(self, word):
+        return self.indexentries.has_key(word)
+
     def getdef(self, word):
         """Given a definition name, returns a list of strings with all
         matching definitions.  This is an *exact* match, not a
-        case-insensitive one."""
+        case-insensitive one.  Returns [] if word is not in the dictionary."""
         retval = []
+        if not self.hasdef(word):
+            return retval
         for start, length in self.indexentries[word]:
             self.dictfile.seek(start)
             retval.append(self.dictfile.read(length))

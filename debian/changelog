@@ -1,3 +1,9 @@
+dictdlib (2.0.2) unstable; urgency=low
+
+  * Some bugfixes reported by <horst@freedict.de>
+
+ -- John Goerzen <jgoerzen@complete.org>  Tue, 11 Jun 2002 15:06:52 -0500
+
 dictdlib (2.0.1) unstable; urgency=low
 
   * Fixed a bug with setlonginfo.  Closes: #146599, #146602.
