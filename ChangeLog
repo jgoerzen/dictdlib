@@ -1,3 +1,15 @@
+2002-04-19 12:00  jgoerzen
+
+	* setup.py, debian/changelog: Fixed a braino in finish()
+
+2002-04-19 12:00  jgoerzen
+
+	* dictdlib.py: Fixed a braino.
+
+2002-04-19 11:38  jgoerzen
+
+	* ChangeLog: [no log message]
+
 2002-04-19 11:38  jgoerzen
 
 	* debian/changelog: Updated.

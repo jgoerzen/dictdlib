@@ -107,7 +107,7 @@ class DictWriter:
     def finish(self):
         """Called to finish the writing process.  **REQUIRED**.
         This will write the index and close the files."""
-        if not quiet:
+        if not self.quiet:
             sys.stdout.write("\nProcessed %d records.\nWriting index..." % \
                              self.count)
             sys.stdout.flush()
@@ -119,5 +119,5 @@ class DictWriter:
         self.indexfile.close()
         self.dictfile.close()
 
-        if not quiet:
+        if not self.quiet:
             sys.stdout.write(" Finished.\n")
