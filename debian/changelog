@@ -1,3 +1,9 @@
+dictdlib (1.0.4) unstable; urgency=low
+
+  * Added DictReader class.
+
+ -- John Goerzen <jgoerzen@complete.org>  Fri, 19 Apr 2002 20:19:36 -0500
+
 dictdlib (1.0.3) unstable; urgency=low
 
   * More adjustments to sort -- the docs for GNU's sort(1) were wrong,

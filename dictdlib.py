@@ -16,7 +16,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys, string
+import sys, string, gzip
 
 b64_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 url_headword = "00-database-url"
@@ -167,3 +167,39 @@ class DictWriter:
         self.dictfile.close()
 
         self.update("Complete.\n")
+
+class DictReader:
+    def __init__(self, basename):
+        """Initialize a DictReader object.  Provide it with the basename."""
+        self.basename = basename
+        try:
+            self.dictfile = open(self.basename + ".dict", "rb")
+        except IOError:
+            self.dictfile = gzip.GzipFile(self.basename + ".dict.dz", "rb")
+        self.indexfile = open(self.basename + ".index", "rt")
+
+    def getdeflist(self):
+        """Returns a list of strings naming all definitions contained
+        in this dictionary."""
+        self.indexfile.seek(0)
+        retval = []
+        for line in self.indexfile.xreadlines():
+            splits = line.split("\t")
+            retval.append(splits[0])
+        return retval
+
+    def getdef(self, defname):
+        """Given a definition name, returns a list of strings
+        with all matching definitions."""
+        retval = []
+        self.indexfile.seek(0)
+        for line in self.indexfile.xreadlines():
+            word, start, size = line.rstrip().split("\t")
+            if not word == defname:
+                continue
+            start = b64_decode(start)
+            size = b64_decode(size)
+            self.dictfile.seek(start)
+            retval.append(self.dictfile.read(size))
+        return retval
+    

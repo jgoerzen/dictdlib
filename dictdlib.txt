@@ -4,7 +4,7 @@ NAME
     dictdlib
 
 FILE
-    /home/jgoerzen/tree/dictdlib/dictdlib.py
+    /usr/home/jgoerzen/dict/dictdlib/dictdlib.py
 
 DESCRIPTION
     # Dictionary creation library
@@ -26,7 +26,33 @@ DESCRIPTION
     #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CLASSES
+    DictReader
     DictWriter
+    
+    class DictReader
+     |  Methods defined here:
+     |  
+     |  __init__(self, basename)
+     |      Initialize a DictReader object.  Provide it with the basename.
+     |  
+     |  getdef(self, defname)
+     |      Given a definition name, returns a list of strings
+     |      with all matching definitions.
+     |  
+     |  getdeflist(self)
+     |      Returns a list of strings naming all definitions contained
+     |      in this dictionary.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and non-method functions defined here:
+     |  
+     |  __doc__ = None
+     |  
+     |  __module__ = 'dictdlib'
+     |      str(object) -> string
+     |      
+     |      Return a nice string representation of the object.
+     |      If the argument is a string, the return value is the same object.
     
     class DictWriter
      |  Methods defined here:
@@ -77,17 +103,20 @@ FUNCTIONS
         Takes as input an integer val and returns a string of it encoded
         with the base64 algorithm used by dict indexes.
     
+    sortfunc(x, y)
+        Emulate sort -df.
+    
     sortnormalize(x)
         Returns a value such that x is mapped to a format that sorts properly
         with standard comparison.
 
 DATA
-    __file__ = './dictdlib.py'
+    __file__ = './dictdlib.pyc'
     __name__ = 'dictdlib'
     b64_list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345...
     info_headword = '00-database-info'
     short_headword = '00-database-short'
     url_headword = '00-database-url'
-    validdict = {' ': 1, '0': 1, '1': 1, '2': 1, '3': 1, '4': 1, '5': 1, '...
-    x = ' '
+    validdict = {'\t': 1, ' ': 1, '0': 1, '1': 1, '2': 1, '3': 1, '4': 1, ...
+    x = '\t'
 

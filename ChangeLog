@@ -1,3 +1,15 @@
+2002-04-19 16:26  jgoerzen
+
+	* dictdlib.py: Another try.
+
+2002-04-19 16:25  jgoerzen
+
+	* dictdlib.py: Updated sort algorithm
+
+2002-04-19 15:32  jgoerzen
+
+	* ChangeLog: Updated.
+
 2002-04-19 15:32  jgoerzen
 
 	* debian/changelog: Updated for 1.0.3
