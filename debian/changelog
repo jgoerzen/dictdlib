@@ -1,3 +1,11 @@
+dictdlib (1.0.5) unstable; urgency=low
+
+  * Rewrote interface; is now capable of updates.  New DictDB class.
+  * DictReader and DictWriter are now "compatibility" classes that
+    are implemented in terms of DictDB.
+
+ -- John Goerzen <jgoerzen@complete.org>  Thu,  2 May 2002 14:12:51 -0500
+
 dictdlib (1.0.4) unstable; urgency=low
 
   * Added DictReader class.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.2
 
-# $Id: setup.py,v 1.4 2002/04/19 17:11:09 jgoerzen Exp $
+# $Id: setup.py,v 1.5 2002/05/02 19:16:40 jgoerzen Exp $
 
 # Python API for generating dict files.
 # COPYRIGHT #
@@ -25,7 +25,7 @@
 from distutils.core import setup
 
 setup(name = "dictdlib",
-      version = "1.0.2",
+      version = "2.0.0",
       description = "Python library for generating dictd files",
       author = "John Goerzen",
       author_email = 'jgoerzen@complete.org',

@@ -4,7 +4,7 @@ NAME
     dictdlib
 
 FILE
-    /usr/home/jgoerzen/dict/dictdlib/dictdlib.py
+    /home/jgoerzen/tree/dictdlib/dictdlib.py
 
 DESCRIPTION
     # Dictionary creation library
@@ -26,10 +26,114 @@ DESCRIPTION
     #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 CLASSES
+    DictDB
     DictReader
     DictWriter
     
+    class DictDB
+     |  Methods defined here:
+     |  
+     |  __init__(self, basename, mode='read', quiet=0)
+     |      Initialize a DictDB object.
+     |      
+     |      Mode must be one of:
+     |      
+     |      read -- read-only access
+     |      
+     |      write -- write-only access, truncates existing files, does not work
+     |      with .dz.  dict created if nonexistant.
+     |      
+     |      update -- read/write access, dict created if nonexistant.  Does not
+     |      work with .dz
+     |      
+     |      Read can read dict or dict.dz files.  Write and update will NOT work
+     |      with dict.dz files.
+     |      
+     |      If quiet is nonzero, status messages
+     |      will be suppressed.
+     |  
+     |  _initindex(self)
+     |      Load the entire index off disk into memory.
+     |  
+     |  addentry(self, defstr, headwords)
+     |      Writes an entry.  defstr holds the content of the definition.
+     |      headwords is a list specifying one or more words under which this
+     |      definition should be indexed.  This function always adds \n
+     |      to the end of defstr.
+     |  
+     |  addindexentry(self, word, start, size)
+     |      Adds an entry to the index.  word is the relevant word.
+     |      start is the starting position in the dictionary and size is the
+     |      size of the definition; both are integers.
+     |  
+     |  delindexentry(self, word, start=None, size=None)
+     |      Removes an entry from the index; word is the word to search for.
+     |      
+     |      start and size are optional.  If they are specified, only index
+     |      entries matching the specified values will be removed.
+     |      
+     |      For instance, if word is "foo" and start and size are not specified,
+     |      all index entries for the word foo will be removed.  If start and size
+     |      are specified, only those entries matching all criteria will be
+     |      removed.
+     |      
+     |      This function does not actually remove the data from the .dict file.
+     |      Therefore, information removed by this function will still
+     |      exist on-disk in the .dict file, but the dict server will just
+     |      not "see" it -- there will be no way to get to it anymore.
+     |      
+     |      Returns a count of the deleted entries.
+     |  
+     |  finish(self, dosort=1)
+     |      Called to finish the writing process.
+     |      **REQUIRED IF OPENED WITH 'update' OR 'write' MODES**.
+     |      This will write the index and close the files.
+     |      
+     |      dosort is optional and defaults to true.  If set to false,
+     |      dictlib will not sort the index file.  In this case, you
+     |      MUST manually sort it through "sort -df" before it can be used.
+     |  
+     |  getdef(self, word)
+     |      Given a definition name, returns a list of strings with all
+     |      matching definitions.  This is an *exact* match, not a
+     |      case-insensitive one.
+     |  
+     |  getdeflist(self)
+     |      Returns a list of strings naming all definitions contained
+     |      in this dictionary.
+     |  
+     |  setlonginfo(self, longinfo)
+     |      Sets the extended information for this database.  If there was
+     |      already long info specified, we will use delindexentry() on it
+     |      first.
+     |  
+     |  setshortname(self, shortname)
+     |      Sets the shortname for this database.  If there was already
+     |      a shortname specified, we will use delindexentry() on it first.
+     |  
+     |  seturl(self, url)
+     |      Sets the URL attribute of this database.  If there was
+     |      already a URL specified, we will use delindexentry() on it
+     |      first.
+     |  
+     |  update(self, string)
+     |      Writes string out, if not quiet.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and non-method functions defined here:
+     |  
+     |  __doc__ = None
+     |  
+     |  __module__ = 'dictdlib'
+     |      str(object) -> string
+     |      
+     |      Return a nice string representation of the object.
+     |      If the argument is a string, the return value is the same object.
+    
     class DictReader
+     |  This object provides compatibility with earlier versions
+     |  of dictdlib.  It is now deprecated.
+     |  
      |  Methods defined here:
      |  
      |  __init__(self, basename)
@@ -46,7 +150,11 @@ CLASSES
      |  ----------------------------------------------------------------------
      |  Data and non-method functions defined here:
      |  
-     |  __doc__ = None
+     |  __doc__ = 'This object provides compatibility with earlier versions\n ...
+     |      str(object) -> string
+     |      
+     |      Return a nice string representation of the object.
+     |      If the argument is a string, the return value is the same object.
      |  
      |  __module__ = 'dictdlib'
      |      str(object) -> string
@@ -55,6 +163,9 @@ CLASSES
      |      If the argument is a string, the return value is the same object.
     
     class DictWriter
+     |  This object provides compatibility with earlier versions
+     |  of dictdlib.  It is now deprecated.
+     |  
      |  Methods defined here:
      |  
      |  __init__(self, basename, url='unknown', shortname='unknown', longinfo='unknown', quiet=0)
@@ -70,23 +181,21 @@ CLASSES
      |      dosort is optional and defaults to true.  If set to false,
      |      dictlib will not sort the index file.  In this case, you
      |      MUST manually sort it through "sort -df" before it can be used.
-     |      You might want to do this if you have a very large file since
-     |      dictdlib's sort algorithm is not very efficient yet.
-     |  
-     |  update(self, string)
-     |      Writes string out, if not quiet.
      |  
      |  writeentry(self, defstr, headwords)
      |      Writes an entry.  defstr holds the content of the definition.
      |      headwords is a list specifying one or more words under which this
-     |      definition should be indexed.  This function always adds 
-     |      
+     |      definition should be indexed.  This function always adds \n
      |      to the end of defstr.
      |  
      |  ----------------------------------------------------------------------
      |  Data and non-method functions defined here:
      |  
-     |  __doc__ = None
+     |  __doc__ = 'This object provides compatibility with earlier versions\n ...
+     |      str(object) -> string
+     |      
+     |      Return a nice string representation of the object.
+     |      If the argument is a string, the return value is the same object.
      |  
      |  __module__ = 'dictdlib'
      |      str(object) -> string
@@ -111,7 +220,7 @@ FUNCTIONS
         with standard comparison.
 
 DATA
-    __file__ = './dictdlib.pyc'
+    __file__ = './dictdlib.py'
     __name__ = 'dictdlib'
     b64_list = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345...
     info_headword = '00-database-info'

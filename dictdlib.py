@@ -83,14 +83,17 @@ class DictDB:
         """Initialize a DictDB object.
 
         Mode must be one of:
+
         read -- read-only access
+
         write -- write-only access, truncates existing files, does not work
         with .dz.  dict created if nonexistant.
-        update -- read/write access, dict created if nonexistant.
 
-        Read can read dict or dict.dz files.  You may add index entries to,
-        and read all data from, dict.dz files, but you may not modify any
-        definition or add new definitions to them.
+        update -- read/write access, dict created if nonexistant.  Does not
+        work with .dz
+
+        Read can read dict or dict.dz files.  Write and update will NOT work
+        with dict.dz files.
         
         If quiet is nonzero, status messages
         will be suppressed."""
@@ -219,7 +222,7 @@ class DictDB:
     def addentry(self, defstr, headwords):
         """Writes an entry.  defstr holds the content of the definition.
         headwords is a list specifying one or more words under which this
-        definition should be indexed.  This function always adds \n
+        definition should be indexed.  This function always adds \\n
         to the end of defstr."""
         self.dictfile.seek(0, 2)        # Seek to end of file
         start = self.dictfile.tell()
@@ -233,7 +236,8 @@ class DictDB:
             self.update("Processed %d records\r" % self.count)
 
     def finish(self, dosort = 1):
-        """Called to finish the writing process.  **REQUIRED**.
+        """Called to finish the writing process.
+        **REQUIRED IF OPENED WITH 'update' OR 'write' MODES**.
         This will write the index and close the files.
 
         dosort is optional and defaults to true.  If set to false,
@@ -346,7 +350,7 @@ class DictWriter:
     def writeentry(self, defstr, headwords):
         """Writes an entry.  defstr holds the content of the definition.
         headwords is a list specifying one or more words under which this
-        definition should be indexed.  This function always adds \n
+        definition should be indexed.  This function always adds \\n
         to the end of defstr."""
         self.dictdb.addentry(defstr, headwords)
 
