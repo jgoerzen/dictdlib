@@ -1,3 +1,16 @@
+2002-04-19 11:38  jgoerzen
+
+	* debian/changelog: Updated.
+
+2002-04-19 11:32  jgoerzen
+
+	* setup.py, debian/changelog, debian/rules: Fixes from import
+	error.
+
+2002-04-19 11:31  jgoerzen
+
+	* ChangeLog: Updated.
+
 2002-04-19 11:31  jgoerzen
 
 	* dictdlib.html, dictdlib.txt, debian/changelog, debian/control,
