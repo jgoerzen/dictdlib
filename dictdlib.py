@@ -76,22 +76,117 @@ def sortfunc(x, y):
        return ret
    return cmp(xl[1], yl[1])
 
-class DictWriter:
-    def __init__(self, basename, url = 'unknown', shortname = 'unknown',
-                 longinfo = 'unknown', quiet = 0):
-        """Initialize a DictWriter object.  Will create 'basename.dict' and
-        'basename.index' files.  url, shortname, and longinfo specify the
-        respective attributes of the database.  If quiet is 1,
-        status messages are not printed."""
-        self.dictfile = open(basename + ".dict", "wb")
-        self.indexfile = open(basename + ".index", "wb")
+class DictDB:
+    def __init__(self, basename, mode = 'read', quiet = 0):
+        #, url = 'unknown', shortname = 'unknown',
+        #         longinfo = 'unknown', quiet = 0):
+        """Initialize a DictDB object.
+
+        Mode must be one of:
+        read -- read-only access
+        write -- write-only access, truncates existing files, does not work
+        with .dz.  dict created if nonexistant.
+        update -- read/write access, dict created if nonexistant.
+
+        Read can read dict or dict.dz files.  You may add index entries to,
+        and read all data from, dict.dz files, but you may not modify any
+        definition or add new definitions to them.
+        
+        If quiet is nonzero, status messages
+        will be suppressed."""
+
+        self.mode = mode
+        self.quiet = quiet
         self.indexentries = {}
         self.count = 0
-        self.quiet = quiet
-        self.writeentry(url_headword + "\n     " + url, [url_headword])
-        self.writeentry(short_headword + "\n     " + shortname,
-                        [short_headword])
-        self.writeentry(info_headword + "\n" + longinfo, [info_headword])
+        self.basename = basename
+
+        self.indexfilename = self.basename + ".index"
+        if os.path.isfile(self.basename + ".dict.dz"):
+            self.dictfilename = self.basename + ".dict.dz"
+            self.usecompression = 1
+        else:
+            self.dictfilename = self.basename + ".dict"
+            self.usecompression = 0
+
+        if mode == 'read':
+            self.indexfile = open(self.indexfilename, "rt")
+            if self.usecompression:
+                self.dictfile = gzip.GzipFile(self.dictfilename, "rb")
+            else:
+                self.dictfile = open(self.dictfilename, "rb")
+            self._initindex()
+        elif mode == 'write':
+            self.indexfile = open(self.indexfilename, "wt")
+            if self.usecompression:
+                raise ValueError, "'write' mode incompatible with .dz files"
+            else:
+                self.dictfile = open(self.dictfilename, "wb")
+        elif mode == 'update':
+            self.indexfile = open(self.indexfilename, "r+b")
+            if self.usecompression:
+                # Open it read-only since we don't support mods.
+                self.dictfile = gzip.GzipFile(self.dictfilename, "rb")
+            else:
+                self.dictfile = open(self.dictfilename, "r+b")
+            self._initindex()
+        else:
+            raise ValueError, "mode must be 'read', 'write', or 'update'"
+
+        #self.writeentry(url_headword + "\n     " + url, [url_headword])
+        #self.writeentry(short_headword + "\n     " + shortname,
+        #                [short_headword])
+        #self.writeentry(info_headword + "\n" + longinfo, [info_headword])
+
+    def _initindex(self):
+        """Load the entire index off disk into memory."""
+        self.indexfile.seek(0)
+        for line in self.indexfile.xreadlines():
+            splits = line.rstrip().split("\t")
+            if not self.indexentries.has_key(splits[0]):
+                self.indexentries[splits[0]] = []
+            self.indexentries[splits[0]].append([b64_decode(splits[1]),
+                                                 b64_decode(splits[2])])
+
+    def addindexentry(self, word, start, size):
+        """Adds an entry to the index.  word is the relevant word.
+        start is the starting position in the dictionary and size is the
+        size of the definition; both are integers."""
+        if not self.indexentries.has_key(word):
+            self.indexentries[word] = []
+        self.indexentries[word].append([start, size])
+
+    def delindexentry(self, word, start = None, size = None):
+        """Removes an entry from the index; word is the word to search for.
+
+        start and size are optional.  If they are specified, only index
+        entries matching the specified values will be removed.
+
+        For instance, if word is "foo" and start and size are not specified,
+        all index entries for the word foo will be removed.  If start and size
+        are specified, only those entries matching all criteria will be
+        removed.
+
+        This function does not actually remove the data from the .dict file.
+        Therefore, information removed by this function will still
+        exist on-disk in the .dict file, but the dict server will just
+        not "see" it -- there will be no way to get to it anymore.
+
+        Returns a count of the deleted entries."""
+
+        if not self.indexentries.has_key(word):
+            return 0
+        retval = 0
+        entrylist = self.indexentries[word]
+        for i in range(len(entrylist) - 1, -1, -1):
+            # Go backwords so the del doesn't effect the index.
+            if (start == None or start == entrylist[i][0]) and \
+               (size == None or size == entrylist[i][1]):
+                del(entrylist[i])
+                retval += 1
+        if len(entrylist) == 0:         # If we emptied it, del it completely
+            del(self.indexentries[word])
+        return retval        
 
     def update(self, string):
         """Writes string out, if not quiet."""
@@ -99,18 +194,39 @@ class DictWriter:
             sys.stdout.write(string)
             sys.stdout.flush()
 
-    def writeentry(self, defstr, headwords):
+    def seturl(self, url):
+        """Sets the URL attribute of this database.  If there was
+        already a URL specified, we will use delindexentry() on it
+        first."""
+        self.delindexentry(url_headword)
+        self.addentry(url_headword + "\n     " + url, [url_headword])
+
+    def setshortname(self, shortname):
+        """Sets the shortname for this database.  If there was already
+        a shortname specified, we will use delindexentry() on it first."""
+        self.delindexentry(short_headword)
+        self.addentry(short_headword + "\n     " + shortname,
+                      [short_headword])
+
+    def setlonginfo(self, longinfo):
+        """Sets the extended information for this database.  If there was
+        already long info specified, we will use delindexentry() on it
+        first."""
+        self.delindexentry(info_headword)
+        self.writeentry(info_headword + "\n" + longinfo, [info_headword])
+
+
+    def addentry(self, defstr, headwords):
         """Writes an entry.  defstr holds the content of the definition.
         headwords is a list specifying one or more words under which this
         definition should be indexed.  This function always adds \n
         to the end of defstr."""
+        self.dictfile.seek(0, 2)        # Seek to end of file
         start = self.dictfile.tell()
         defstr += "\n"
         self.dictfile.write(defstr)
         for word in headwords:
-            if not self.indexentries.has_key(word):
-                self.indexentries[word] = []
-            self.indexentries[word].append([start, len(defstr)])
+            self.addindexentry(word, start, len(defstr))
             self.count += 1
 
         if self.count % 1000 == 0:
@@ -122,10 +238,7 @@ class DictWriter:
 
         dosort is optional and defaults to true.  If set to false,
         dictlib will not sort the index file.  In this case, you
-        MUST manually sort it through "sort -df" before it can be used.
-        You might want to do this if you have a very large file since
-        dictdlib's sort algorithm is not very efficient yet."""
-
+        MUST manually sort it through "sort -df" before it can be used."""
 
         self.update("Processed %d records.\n" % self.count)
 
@@ -167,47 +280,82 @@ class DictWriter:
             self.update(", done.\n")
 
         self.update("Writing index...\n")
+
+        self.indexfile.seek(0)
             
         for entry in indexlist:
             self.indexfile.write(entry + "\n")
 
+        if self.mode == 'update':
+            # In case things were deleted
+            self.indexfile.truncate()
         self.indexfile.close()
         self.dictfile.close()
 
         self.update("Complete.\n")
 
+    def getdeflist(self):
+        """Returns a list of strings naming all definitions contained
+        in this dictionary."""
+        return self.indexentries.keys()
+
+    def getdef(self, word):
+        """Given a definition name, returns a list of strings with all
+        matching definitions.  This is an *exact* match, not a
+        case-insensitive one."""
+        retval = []
+        for start, length in self.indexentries[defname]:
+            self.dictfile.seek(start)
+            retval.append(self.dictfile.read(length))
+        return retval
+            
+
 class DictReader:
+    """This object provides compatibility with earlier versions
+    of dictdlib.  It is now deprecated."""
+    
     def __init__(self, basename):
         """Initialize a DictReader object.  Provide it with the basename."""
-        self.basename = basename
-        try:
-            self.dictfile = open(self.basename + ".dict", "rb")
-        except IOError:
-            self.dictfile = gzip.GzipFile(self.basename + ".dict.dz", "rb")
-        self.indexfile = open(self.basename + ".index", "rt")
+        self.dictdb = DictDB(basename, 'read')
 
     def getdeflist(self):
         """Returns a list of strings naming all definitions contained
         in this dictionary."""
-        self.indexfile.seek(0)
-        retval = []
-        for line in self.indexfile.xreadlines():
-            splits = line.split("\t")
-            retval.append(splits[0])
-        return retval
+        return self.dictdb.getdeflist()
 
     def getdef(self, defname):
         """Given a definition name, returns a list of strings
         with all matching definitions."""
-        retval = []
-        self.indexfile.seek(0)
-        for line in self.indexfile.xreadlines():
-            word, start, size = line.rstrip().split("\t")
-            if not word == defname:
-                continue
-            start = b64_decode(start)
-            size = b64_decode(size)
-            self.dictfile.seek(start)
-            retval.append(self.dictfile.read(size))
-        return retval
+        return self.dictdb.getdef()
+
+class DictWriter:
+    """This object provides compatibility with earlier versions
+    of dictdlib.  It is now deprecated."""
+
+    def __init__(self, basename, url = 'unknown', shortname = 'unknown',
+                 longinfo = 'unknown', quiet = 0):
+        """Initialize a DictWriter object.  Will create 'basename.dict' and
+        'basename.index' files.  url, shortname, and longinfo specify the
+        respective attributes of the database.  If quiet is 1,
+        status messages are not printed."""
+        self.dictdb = DictDB(basename, 'write', quiet)
+        self.dictdb.seturl(url)
+        self.dictdb.setshortname(shortname)
+        self.dictdb.setlonginfo(longinfo)
+
+    def writeentry(self, defstr, headwords):
+        """Writes an entry.  defstr holds the content of the definition.
+        headwords is a list specifying one or more words under which this
+        definition should be indexed.  This function always adds \n
+        to the end of defstr."""
+        self.dictdb.addentry(defstr, headwords)
+
+    def finish(self, dosort = 1):
+        """Called to finish the writing process.  **REQUIRED**.
+        This will write the index and close the files.
+
+        dosort is optional and defaults to true.  If set to false,
+        dictlib will not sort the index file.  In this case, you
+        MUST manually sort it through "sort -df" before it can be used."""
+        self.dictdb.finish(dosort)
     
