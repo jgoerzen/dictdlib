@@ -115,8 +115,9 @@ class DictWriter:
         MUST manually sort it through "sort -df" before it can be used.
         You might want to do this if you have a very large file since
         dictdlib's sort algorithm is not very efficient yet."""
+
         if not self.quiet:
-            sys.stdout.write("\nProcessed %d records.\n")
+            sys.stdout.write("Processed %d records.\n" % self.count)
 
         if dosort:
             if not self.quiet:
