@@ -16,7 +16,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import sys, string, gzip
+import sys, string, gzip, os
 
 b64_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 url_headword = "00-database-url"
@@ -252,8 +252,9 @@ class DictDB:
             indexlist = []
             for word, defs in self.indexentries.items():
                 for thisdef in defs:
-                    indexlist.append("%s\t%s\t%s" % (word, b64_encode(defs[0]),
-                                                     b64_encode(defs[1])))
+                    indexlist.append("%s\t%s\t%s" % (word,
+                                                     b64_encode(thisdef[0]),
+                                                     b64_encode(thisdef[1])))
 
             self.update(" mapping")
                 
@@ -308,7 +309,7 @@ class DictDB:
         matching definitions.  This is an *exact* match, not a
         case-insensitive one."""
         retval = []
-        for start, length in self.indexentries[defname]:
+        for start, length in self.indexentries[word]:
             self.dictfile.seek(start)
             retval.append(self.dictfile.read(length))
         return retval
@@ -330,7 +331,7 @@ class DictReader:
     def getdef(self, defname):
         """Given a definition name, returns a list of strings
         with all matching definitions."""
-        return self.dictdb.getdef()
+        return self.dictdb.getdef(defname)
 
 class DictWriter:
     """This object provides compatibility with earlier versions
