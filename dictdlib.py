@@ -61,6 +61,7 @@ for x in string.ascii_letters + string.digits + ' ':
 def sortfunc(x, y):
     """Used to sort entries according to the format required for the index."""
     x2 = ''
+    y2 = ''
     for char in x:
         if validdict.has_key(char):
             x2 += char
@@ -112,7 +113,7 @@ class DictWriter:
                              self.count)
             sys.stdout.flush()
 
-        self.indexentries.sort()
+        self.indexentries.sort(sortfunc)
         for entry in self.indexentries:
             self.indexfile.write(entry + "\n")
 
