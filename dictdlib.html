@@ -71,6 +71,8 @@ MUST&nbsp;manually&nbsp;sort&nbsp;it&nbsp;through&nbsp;"sort&nbsp;-df"&nbsp;befo
 You&nbsp;might&nbsp;want&nbsp;to&nbsp;do&nbsp;this&nbsp;if&nbsp;you&nbsp;have&nbsp;a&nbsp;very&nbsp;large&nbsp;file&nbsp;since<br>
 dictdlib's&nbsp;sort&nbsp;algorithm&nbsp;is&nbsp;not&nbsp;very&nbsp;efficient&nbsp;yet.</tt></dd></dl>
 
+<dl><dt><a name="DictWriter-update"><strong>update</strong></a>(self, string)</dt><dd><tt>Writes&nbsp;string&nbsp;out,&nbsp;if&nbsp;not&nbsp;quiet.</tt></dd></dl>
+
 <dl><dt><a name="DictWriter-writeentry"><strong>writeentry</strong></a>(self, defstr, headwords)</dt><dd><tt>Writes&nbsp;an&nbsp;entry.&nbsp;&nbsp;defstr&nbsp;holds&nbsp;the&nbsp;content&nbsp;of&nbsp;the&nbsp;definition.<br>
 headwords&nbsp;is&nbsp;a&nbsp;list&nbsp;specifying&nbsp;one&nbsp;or&nbsp;more&nbsp;words&nbsp;under&nbsp;which&nbsp;this<br>
 definition&nbsp;should&nbsp;be&nbsp;indexed.&nbsp;&nbsp;This&nbsp;function&nbsp;always&nbsp;adds&nbsp;<br>
@@ -97,7 +99,8 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 with&nbsp;the&nbsp;base64&nbsp;algorithm&nbsp;used&nbsp;by&nbsp;dict&nbsp;indexes.</tt></dd></dl>
  <dl><dt><a name="-b64_encode"><strong>b64_encode</strong></a>(val)</dt><dd><tt>Takes&nbsp;as&nbsp;input&nbsp;an&nbsp;integer&nbsp;val&nbsp;and&nbsp;returns&nbsp;a&nbsp;string&nbsp;of&nbsp;it&nbsp;encoded<br>
 with&nbsp;the&nbsp;base64&nbsp;algorithm&nbsp;used&nbsp;by&nbsp;dict&nbsp;indexes.</tt></dd></dl>
- <dl><dt><a name="-sortfunc"><strong>sortfunc</strong></a>(x, y)</dt><dd><tt>Used&nbsp;to&nbsp;sort&nbsp;entries&nbsp;according&nbsp;to&nbsp;the&nbsp;format&nbsp;required&nbsp;for&nbsp;the&nbsp;index.</tt></dd></dl>
+ <dl><dt><a name="-sortnormalize"><strong>sortnormalize</strong></a>(x)</dt><dd><tt>Returns&nbsp;a&nbsp;value&nbsp;such&nbsp;that&nbsp;x&nbsp;is&nbsp;mapped&nbsp;to&nbsp;a&nbsp;format&nbsp;that&nbsp;sorts&nbsp;properly<br>
+with&nbsp;standard&nbsp;comparison.</tt></dd></dl>
 </td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

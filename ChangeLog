@@ -1,3 +1,43 @@
+2002-04-19 13:07  jgoerzen
+
+	* dictdlib.py: Typo fix.
+
+2002-04-19 13:05  jgoerzen
+
+	* dictdlib.html, dictdlib.txt: Reflected new sort algorithm.
+
+2002-04-19 13:05  jgoerzen
+
+	* dictdlib.py, debian/changelog: Moved to a new sorting algorithm.
+
+2002-04-19 12:47  jgoerzen
+
+	* dictdlib.py: More display tweaking.
+
+2002-04-19 12:46  jgoerzen
+
+	* dictdlib.py: Fixed a display bug.
+
+2002-04-19 12:39  jgoerzen
+
+	* dictdlib.html, dictdlib.py, dictdlib.txt: Updated for 1.0.2
+
+2002-04-19 12:14  jgoerzen
+
+	* dictdlib.py: Fixed a bug in sortfunc.
+
+2002-04-19 12:11  jgoerzen
+
+	* dictdlib.py, setup.py, debian/changelog: Updated, bug fixes.
+
+2002-04-19 12:05  jgoerzen
+
+	* dictdlib.py: Updated.
+
+2002-04-19 12:00  jgoerzen
+
+	* ChangeLog: Prepare for 1.0.1
+
 2002-04-19 12:00  jgoerzen
 
 	* setup.py, debian/changelog: Fixed a braino in finish()

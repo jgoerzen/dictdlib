@@ -58,18 +58,14 @@ validdict = {}
 for x in string.ascii_letters + string.digits + ' ':
     validdict[x] = 1
 
-def sortfunc(x, y):
-    """Used to sort entries according to the format required for the index."""
+def sortnormalize(x):
+    """Returns a value such that x is mapped to a format that sorts properly
+    with standard comparison."""
     x2 = ''
-    y2 = ''
     for char in x:
         if validdict.has_key(char):
             x2 += char
-    for char in y:
-        if validdict.has_key(char):
-            y2 += char
-
-    return cmp(x2.lower(), y2.lower())
+    return x2.lower()
 
 class DictWriter:
     def __init__(self, basename, url = 'unknown', shortname = 'unknown',
@@ -88,6 +84,12 @@ class DictWriter:
                         [short_headword])
         self.writeentry(info_headword + "\n" + longinfo, [info_headword])
 
+    def update(self, string):
+        """Writes string out, if not quiet."""
+        if not self.quiet:
+            sys.stdout.write(string)
+            sys.stdout.flush()
+
     def writeentry(self, defstr, headwords):
         """Writes an entry.  defstr holds the content of the definition.
         headwords is a list specifying one or more words under which this
@@ -102,9 +104,8 @@ class DictWriter:
                                       b64_encode(len(defstr))))
             self.count += 1
 
-        if (not self.quiet) and (self.count % 1000 == 0):
-            sys.stdout.write("Processed %d records\r" % self.count)
-            sys.stdout.flush()
+        if self.count % 1000 == 0:
+            self.update("Processed %d records\r" % self.count)
 
     def finish(self, dosort = 1):
         """Called to finish the writing process.  **REQUIRED**.
@@ -116,16 +117,39 @@ class DictWriter:
         You might want to do this if you have a very large file since
         dictdlib's sort algorithm is not very efficient yet."""
 
-        if not self.quiet:
-            sys.stdout.write("Processed %d records.\n" % self.count)
+
+        self.update("Processed %d records.\n" % self.count)
 
         if dosort:
-            if not self.quiet:
-                print "Sorting index..."
-            self.indexentries.sort(sortfunc)
+            self.update("Sorting index: mapping")
+                
+            sortmap = {}
+            for entry in self.indexentries:
+                norm = sortnormalize(entry)
+                if sortmap.has_key(norm):
+                    sortmap[norm].append(entry)
+                    sortmap[norm].sort()
+                else:
+                    sortmap[norm] = [entry]
 
-        if not self.quiet:
-            print "Writing index..."
+            self.update(" listing")
+                
+            normalizedentries = sortmap.keys()
+
+            self.update(" sorting")
+
+            normalizedentries.sort()
+
+            self.update(" re-mapping")
+            self.indexentries = []
+
+            for normentry in normalizedentries:
+                for entry in sortmap[normentry]:
+                    self.indexentries.append(entry)
+
+            self.update(", done.\n")
+
+        self.update("Writing index...\n")
             
         for entry in self.indexentries:
             self.indexfile.write(entry + "\n")
@@ -133,5 +157,4 @@ class DictWriter:
         self.indexfile.close()
         self.dictfile.close()
 
-        if not self.quiet:
-            print "Complete."
+        self.update("Complete.\n")

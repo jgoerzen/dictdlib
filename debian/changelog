@@ -1,6 +1,7 @@
 dictdlib (1.0.2) unstable; urgency=low
 
   * Fixed a bug with sorting.
+  * New, faster sort algorithm.
 
  -- John Goerzen <jgoerzen@complete.org>  Fri, 19 Apr 2002 12:10:46 -0500
 

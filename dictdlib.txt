@@ -47,6 +47,9 @@ CLASSES
      |      You might want to do this if you have a very large file since
      |      dictdlib's sort algorithm is not very efficient yet.
      |  
+     |  update(self, string)
+     |      Writes string out, if not quiet.
+     |  
      |  writeentry(self, defstr, headwords)
      |      Writes an entry.  defstr holds the content of the definition.
      |      headwords is a list specifying one or more words under which this
@@ -74,8 +77,9 @@ FUNCTIONS
         Takes as input an integer val and returns a string of it encoded
         with the base64 algorithm used by dict indexes.
     
-    sortfunc(x, y)
-        Used to sort entries according to the format required for the index.
+    sortnormalize(x)
+        Returns a value such that x is mapped to a format that sorts properly
+        with standard comparison.
 
 DATA
     __file__ = './dictdlib.py'
