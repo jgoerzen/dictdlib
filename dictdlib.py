@@ -86,12 +86,13 @@ class DictWriter:
         self.writeentry(url_headword + "\n     " + url, [url_headword])
         self.writeentry(short_headword + "\n     " + shortname,
                         [short_headword])
-        self.writeentry(info_headword + longinfo, [info_headword])
+        self.writeentry(info_headword + "\n" + longinfo, [info_headword])
 
     def writeentry(self, defstr, headwords):
         """Writes an entry.  defstr holds the content of the definition.
         headwords is a list specifying one or more words under which this
-        definition should be indexed."""
+        definition should be indexed.  This function always adds \n
+        to the end of defstr."""
         start = self.dictfile.tell()
         defstr += "\n"
         self.dictfile.write(defstr)
@@ -105,15 +106,26 @@ class DictWriter:
             sys.stdout.write("Processed %d records\r" % self.count)
             sys.stdout.flush()
 
-    def finish(self):
+    def finish(self, dosort = 1):
         """Called to finish the writing process.  **REQUIRED**.
-        This will write the index and close the files."""
-        if not self.quiet:
-            sys.stdout.write("\nProcessed %d records.\nWriting index..." % \
-                             self.count)
-            sys.stdout.flush()
+        This will write the index and close the files.
 
-        self.indexentries.sort(sortfunc)
+        dosort is optional and defaults to true.  If set to false,
+        dictlib will not sort the index file.  In this case, you
+        MUST manually sort it through "sort -df" before it can be used.
+        You might want to do this if you have a very large file since
+        dictdlib's sort algorithm is not very efficient yet."""
+        if not self.quiet:
+            sys.stdout.write("\nProcessed %d records.\n")
+
+        if dosort:
+            if not self.quiet:
+                print "Sorting index..."
+            self.indexentries.sort(sortfunc)
+
+        if not self.quiet:
+            print "Writing index..."
+            
         for entry in self.indexentries:
             self.indexfile.write(entry + "\n")
 
@@ -121,4 +133,4 @@ class DictWriter:
         self.dictfile.close()
 
         if not self.quiet:
-            sys.stdout.write(" Finished.\n")
+            print "Complete."

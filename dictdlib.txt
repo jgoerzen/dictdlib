@@ -37,14 +37,22 @@ CLASSES
      |      respective attributes of the database.  If quiet is 1,
      |      status messages are not printed.
      |  
-     |  finish(self)
+     |  finish(self, dosort=1)
      |      Called to finish the writing process.  **REQUIRED**.
      |      This will write the index and close the files.
+     |      
+     |      dosort is optional and defaults to true.  If set to false,
+     |      dictlib will not sort the index file.  In this case, you
+     |      MUST manually sort it through "sort -df" before it can be used.
+     |      You might want to do this if you have a very large file since
+     |      dictdlib's sort algorithm is not very efficient yet.
      |  
      |  writeentry(self, defstr, headwords)
      |      Writes an entry.  defstr holds the content of the definition.
      |      headwords is a list specifying one or more words under which this
-     |      definition should be indexed.
+     |      definition should be indexed.  This function always adds 
+     |      
+     |      to the end of defstr.
      |  
      |  ----------------------------------------------------------------------
      |  Data and non-method functions defined here:

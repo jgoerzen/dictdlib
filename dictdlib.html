@@ -62,12 +62,20 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 respective&nbsp;attributes&nbsp;of&nbsp;the&nbsp;database.&nbsp;&nbsp;If&nbsp;quiet&nbsp;is&nbsp;1,<br>
 status&nbsp;messages&nbsp;are&nbsp;not&nbsp;printed.</tt></dd></dl>
 
-<dl><dt><a name="DictWriter-finish"><strong>finish</strong></a>(self)</dt><dd><tt>Called&nbsp;to&nbsp;finish&nbsp;the&nbsp;writing&nbsp;process.&nbsp;&nbsp;**REQUIRED**.<br>
-This&nbsp;will&nbsp;write&nbsp;the&nbsp;index&nbsp;and&nbsp;close&nbsp;the&nbsp;files.</tt></dd></dl>
+<dl><dt><a name="DictWriter-finish"><strong>finish</strong></a>(self, dosort<font color="#909090">=1</font>)</dt><dd><tt>Called&nbsp;to&nbsp;finish&nbsp;the&nbsp;writing&nbsp;process.&nbsp;&nbsp;**REQUIRED**.<br>
+This&nbsp;will&nbsp;write&nbsp;the&nbsp;index&nbsp;and&nbsp;close&nbsp;the&nbsp;files.<br>
+&nbsp;<br>
+dosort&nbsp;is&nbsp;optional&nbsp;and&nbsp;defaults&nbsp;to&nbsp;true.&nbsp;&nbsp;If&nbsp;set&nbsp;to&nbsp;false,<br>
+dictlib&nbsp;will&nbsp;not&nbsp;sort&nbsp;the&nbsp;index&nbsp;file.&nbsp;&nbsp;In&nbsp;this&nbsp;case,&nbsp;you<br>
+MUST&nbsp;manually&nbsp;sort&nbsp;it&nbsp;through&nbsp;"sort&nbsp;-df"&nbsp;before&nbsp;it&nbsp;can&nbsp;be&nbsp;used.<br>
+You&nbsp;might&nbsp;want&nbsp;to&nbsp;do&nbsp;this&nbsp;if&nbsp;you&nbsp;have&nbsp;a&nbsp;very&nbsp;large&nbsp;file&nbsp;since<br>
+dictdlib's&nbsp;sort&nbsp;algorithm&nbsp;is&nbsp;not&nbsp;very&nbsp;efficient&nbsp;yet.</tt></dd></dl>
 
 <dl><dt><a name="DictWriter-writeentry"><strong>writeentry</strong></a>(self, defstr, headwords)</dt><dd><tt>Writes&nbsp;an&nbsp;entry.&nbsp;&nbsp;defstr&nbsp;holds&nbsp;the&nbsp;content&nbsp;of&nbsp;the&nbsp;definition.<br>
 headwords&nbsp;is&nbsp;a&nbsp;list&nbsp;specifying&nbsp;one&nbsp;or&nbsp;more&nbsp;words&nbsp;under&nbsp;which&nbsp;this<br>
-definition&nbsp;should&nbsp;be&nbsp;indexed.</tt></dd></dl>
+definition&nbsp;should&nbsp;be&nbsp;indexed.&nbsp;&nbsp;This&nbsp;function&nbsp;always&nbsp;adds&nbsp;<br>
+&nbsp;<br>
+to&nbsp;the&nbsp;end&nbsp;of&nbsp;defstr.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
