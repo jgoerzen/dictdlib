@@ -9,8 +9,8 @@
 # This is the debhelper compatibility version to use.
 export DH_COMPAT=3
 
-PYTHON=python2.2
-PACKAGE=python2.2-dictdlib
+PYTHON=python2.3
+PACKAGE=python2.3-dictdlib
 
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))

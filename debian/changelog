@@ -1,3 +1,9 @@
+dictdlib (2.0.3) unstable; urgency=low
+
+  * Updated for Python 2.3.
+
+ -- John Goerzen <jgoerzen@complete.org>  Mon, 18 Aug 2003 16:00:39 -0500
+
 dictdlib (2.0.2) unstable; urgency=low
 
   * Some bugfixes reported by <horst@freedict.de>

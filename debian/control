@@ -2,12 +2,12 @@ Source: dictdlib
 Section: interpreters
 Priority: optional
 Maintainer: John Goerzen <jgoerzen@complete.org>
-Build-Depends-Indep: debhelper (>> 3.0.0), python2.2, python2.2-dev
+Build-Depends-Indep: debhelper (>> 3.0.0), python2.3, python2.3-dev
 Standards-Version: 3.5.2
 
-Package: python2.2-dictdlib
+Package: python2.3-dictdlib
 Architecture: all
-Depends: python2.2
+Depends: python2.3
 Suggests: dictd
 Description: Python library for generating dictd dictionaries
  This library is useful if you want to write Python programs that generate
