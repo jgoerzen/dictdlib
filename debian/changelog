@@ -1,4 +1,4 @@
-dictdlib (1.0.5) unstable; urgency=low
+dictdlib (2.0.0) unstable; urgency=low
 
   * Rewrote interface; is now capable of updates.  New DictDB class.
   * DictReader and DictWriter are now "compatibility" classes that
