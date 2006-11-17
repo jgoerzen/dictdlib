@@ -1,3 +1,9 @@
+dictdlib (2.0.4) unstable; urgency=high
+
+  * Updated to the most recent Python policy.
+
+ -- John Goerzen <jgoerzen@complete.org>  Fri, 17 Nov 2006 06:45:27 -0600
+
 dictdlib (2.0.3) unstable; urgency=low
 
   * Updated for Python 2.3.
